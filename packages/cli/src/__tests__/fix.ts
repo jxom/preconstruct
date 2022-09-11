@@ -1064,6 +1064,7 @@ test("module type with three entrypoints (no main, add main and module)", async 
   expect(await getFiles(tmpPath, ["**/package.json"])).toMatchInlineSnapshot(`
     ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ one/package.json ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
     {
+      "type": "module",
       "main": "dist/something-one.esm.js"
     }
 
@@ -1083,6 +1084,7 @@ test("module type with three entrypoints (no main, add main and module)", async 
 
     ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ two/package.json ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
     {
+      "type": "module",
       "main": "dist/something-two.esm.js"
     }
 

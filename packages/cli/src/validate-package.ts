@@ -16,6 +16,7 @@ export async function fixPackage(pkg: Package) {
   const exportsFieldConfig = pkg.exportsFieldConfig();
 
   let fields = {
+    type: pkg.json.type,
     main: true,
     module:
       pkg.entrypoints.some((x) => x.json.module !== undefined) ||

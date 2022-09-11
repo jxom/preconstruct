@@ -11,11 +11,12 @@ let fields = [
   "umd:main",
   "browser",
   "exports",
+  "type",
 ];
 
 export function setFieldInOrder<
   Obj extends { [key: string]: any },
-  Key extends "main" | "module" | "umd:main" | "browser" | "exports",
+  Key extends "main" | "module" | "umd:main" | "browser" | "exports" | "type",
   Val extends any
 >(obj: Obj, field: Key, value: Val): Obj & { [k in Key]: Val } {
   if (field in obj) {
@@ -185,6 +186,10 @@ export const validFieldsForEntrypoint = {
       )}`,
       ...(entrypoint.hasModuleField && moduleBuild),
     };
+  },
+  type(entrypoint: MinimalEntrypoint) {
+    if (entrypoint.package.type === "module") return "module";
+    return "commonjs";
   },
 };
 

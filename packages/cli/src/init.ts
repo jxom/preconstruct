@@ -17,6 +17,10 @@ async function doInit(pkg: Package) {
     pkg.setFieldOnEntrypoints("main");
   }
 
+  if (pkg.type === "module") {
+    pkg.setFieldOnEntrypoints("type");
+  }
+
   let allEntrypointsAreMissingAModuleField = pkg.entrypoints.every(
     (entrypoint) => entrypoint.json.module === undefined
   );
