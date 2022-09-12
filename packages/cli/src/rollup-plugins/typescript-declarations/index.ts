@@ -116,7 +116,9 @@ export default function typescriptDeclarations(pkg: Package): Plugin {
           );
         }
 
-        let mainFieldPath = file.fileName.replace(/\.prod\.js$/, "");
+        let mainFieldPath = file.fileName
+          .replace(/\.prod\.js$/, "")
+          .replace(/\.esm\.js$/, ".esm");
         let relativeToSource = path.relative(
           path.dirname(path.join(opts.dir!, file.fileName)),
           dtsFilename.replace(/\.d\.ts$/, "")

@@ -103,6 +103,77 @@ test("typescript thing", async () => {
   await snapshotDirectory(path.join(tmpPath, "dist"), { files: "all" });
 });
 
+test("module typescript thing", async () => {
+  let tmpPath = await testdir({
+    "package.json": JSON.stringify({
+      name: "weird-typescript-thing",
+      type: "module",
+      main: "dist/weird-typescript-thing.esm.js",
+
+      dependencies: {
+        "@babel/runtime": "^7.8.7",
+      },
+
+      devDependencies: {
+        typescript: "^3.8.3",
+      },
+    }),
+    ".babelrc": JSON.stringify({
+      presets: [require.resolve("@babel/preset-typescript")],
+    }),
+    node_modules: {
+      kind: "symlink",
+      path: repoNodeModules,
+    },
+    "tsconfig.json": JSON.stringify(
+      {
+        compilerOptions: {
+          target: "esnext",
+          module: "esnext",
+          jsx: "react",
+          isolatedModules: true,
+          strict: true,
+          moduleResolution: "node",
+          esModuleInterop: true,
+          noEmit: true,
+        },
+      },
+      null,
+      2
+    ),
+    "src/index.ts": ts`
+                      import { makeThing } from "./thing";
+
+                      export const thing = makeThing();
+                    `,
+
+    "src/other.ts": ts`
+                      export const thing = () => "wow" as const;
+                    `,
+
+    "src/thing.tsx": tsx`
+                       import { thing } from "./other";
+
+                       export const makeThing = () => thing();
+                     `,
+
+    "dist/declarations/src/index.d.ts": ts`
+                                          export declare const thing: "wow";
+                                        `,
+
+    "dist/declarations/src/other.d.ts": ts`
+                                          export declare const thing: () => "wow";
+                                        `,
+
+    "dist/declarations/src/thing.d.ts": ts`
+                                          export declare const makeThing: () => "wow";
+                                        `,
+  });
+  await build(tmpPath);
+
+  await snapshotDirectory(path.join(tmpPath, "dist"), { files: "all" });
+});
+
 test("typescript declarationMap", async () => {
   let dir = await testdir({
     "package.json": JSON.stringify({

@@ -45,7 +45,8 @@ export let getRollupConfig = (
   entrypoints: Array<Entrypoint>,
   aliases: Aliases,
   type: RollupConfigType,
-  reportTransformedFile: (filename: string) => void
+  reportTransformedFile: (filename: string) => void,
+  generateDeclarations: boolean
 ): RollupOptions => {
   let external = [];
   if (pkg.json.peerDependencies) {
@@ -149,7 +150,7 @@ export let getRollupConfig = (
         },
       } as Plugin,
       type === "node-prod" && flowAndNodeDevProdEntry(pkg, warnings),
-      type === "node-prod" && typescriptDeclarations(pkg),
+      generateDeclarations && typescriptDeclarations(pkg),
       babel({
         cwd: pkg.project.directory,
         reportTransformedFile,

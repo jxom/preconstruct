@@ -102,7 +102,8 @@ export function getRollupConfigs(pkg: Package, aliases: Aliases) {
                 filename.replace(pkg.project.directory + path.sep, "")
             );
           }
-        : () => {}
+        : () => {},
+      hasModuleType
     ),
     outputs: [
       ...(!hasModuleType
@@ -138,7 +139,8 @@ export function getRollupConfigs(pkg: Package, aliases: Aliases) {
         pkg.entrypoints,
         aliases,
         "node-prod",
-        () => {}
+        () => {},
+        true
       ),
       outputs: [
         {
@@ -159,7 +161,14 @@ export function getRollupConfigs(pkg: Package, aliases: Aliases) {
   if (pkg.entrypoints[0].json["umd:main"] !== undefined)
     pkg.entrypoints.forEach((entrypoint) => {
       configs.push({
-        config: getRollupConfig(pkg, [entrypoint], aliases, "umd", () => {}),
+        config: getRollupConfig(
+          pkg,
+          [entrypoint],
+          aliases,
+          "umd",
+          () => {},
+          false
+        ),
         outputs: [
           {
             format: "umd" as const,
@@ -190,7 +199,8 @@ export function getRollupConfigs(pkg: Package, aliases: Aliases) {
         pkg.entrypoints,
         aliases,
         "browser",
-        () => {}
+        () => {},
+        false
       ),
       outputs: [
         !exportsFieldConfig &&
@@ -227,7 +237,8 @@ export function getRollupConfigs(pkg: Package, aliases: Aliases) {
         pkg.entrypoints,
         aliases,
         "worker",
-        () => {}
+        () => {},
+        false
       ),
       outputs: [
         {
